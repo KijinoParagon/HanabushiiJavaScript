@@ -22,7 +22,7 @@ header > h1 {
 		background-color: white;
 		display: block;
 		width: 80%;
-		outline: 1px solid red;
 		margin: auto;
+		padding: 0px;
 	}
 }
