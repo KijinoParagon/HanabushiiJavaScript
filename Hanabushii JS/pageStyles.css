@@ -1,0 +1,28 @@
+html {
+	background-color: black;
+}
+
+header {
+	display: block;
+	background-color: black;
+	color: white;
+	height: 10vh;
+}
+
+header > h1 {
+	display: block;
+	text-align: center;
+	outline: 2px solid green;
+	height: auto;
+	vertical-align: middle;
+}
+
+@media (min-width: 1100px){
+	body {
+		background-color: white;
+		display: block;
+		width: 80%;
+		outline: 1px solid red;
+		margin: auto;
+	}
+}

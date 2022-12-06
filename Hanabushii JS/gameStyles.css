@@ -1,0 +1,26 @@
+
+div#gameWindow {
+	margin: auto;
+	height: 100VH;
+	width: 100%;
+	overflow: none;
+}
+
+div#gameWindow:focus {
+	background-color: purple;
+}
+
+/*.res {
+	float: left;
+	position: absolute;
+}
+*/
+
+.background {
+	z-index: 1;
+}
+
+
+.midground {
+	z-index: 2;
+}
