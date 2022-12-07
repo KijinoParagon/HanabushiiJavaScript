@@ -1,19 +1,27 @@
 //Set Initial values
-var playerX = 25;
-var playerY = 0;
+var playerX = 50;
+var playerY = 85;	//floor is 85
 var playerMagX = 0;
 var playerMagY = 0;
-var movingX = 0;
-var movingY = 0;
+
 var playerImg = 0;
+var facingRight = true;
 var floor = 85;
-var margins = 20;
+var margins = 10;
 var inputs = new Array();
 var runningTime = 0;
-var jumpingTime = 0;
-var jumps = 0;
 var worldPosition = 0;
 var frameNum = 0;
+
+var jumps = 0;
+var jumping = false;
+var jumpHeight = 0;
+var jumpDistance = 5;
+
+var slideTimer = 0;
+
+var fraction = 1;
+
 
 inputs["w"] = "false";
 inputs["a"] = "false";
@@ -44,6 +52,6 @@ player.style.height = "8%";
 player.style.top = "0px";
 player.style.left = "600px";
 
-setInterval("tick()", 16);
+setInterval("tick()", 16 * fraction);
 
 

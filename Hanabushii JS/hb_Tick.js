@@ -4,21 +4,29 @@ function tick()
 	frameNum++;
 	frameNum%=100;
 	
+	/*=====================================
+		Gravity/Jumping Things
+	=====================================*/
+	if(jumpHeight == 0)
+		playerMagY -= 0.5;
+	else
+		jumpHeight--;
 	
-	//Gravity/Jumping things
-	if((playerMagY > -10))
+	
+	if(slideTimer > 0)
 	{
-		playerMagY--;
-		
-	}
-	if(inputs["w"] == true && jumpingTime < 6 && jumps <=2)
-	{
-		jumpingTime++;
-		playerMagY+=2;
+		slideTimer--;
 	}
 	
+	if(playerMagX > 1 && slideTimer > 0)
+		playerMagX--;
+	if(playerMagX < 1 && slideTimer > 0)
+		playerMagX++;
 	
-	
+	/*=====================================
+		Running/Walking things
+	=====================================*/
+	//Smooth out the stopping animation
 	if((playerMagX < 0) && !runningTime)
 	{
 		playerMagX+=0.5;
@@ -29,7 +37,13 @@ function tick()
 		playerMagX-=0.5;
 		
 	}
-	//console.log(runningTime);
+	
+	if(!inputs["d"] && !inputs["a"] && runningTime)
+	{
+		runningTime--;
+	}
+	
+	//Adjust the player magnitude based on running or walking
 	if (runningTime <= 30)
 	{
 		if(inputs["d"] == true && playerMagX < 0.5)
@@ -52,81 +66,42 @@ function tick()
 			playerMagX -= 0.5;
 			runningTime++;
 		}
-		//console.log(playerMagX);
 	}
 	
-	
-	
-	
+	//Reposition the player based on their magnitude
 	playerX	+= playerMagX;
-	if(playerX >= (90-margins)){
-		playerX = (90-margins);
-		if (playerMagX !=0)
-		{
-			pos.forEach(moveBG);
-			pos.forEach(bgAdjust);
-		}
-	}
-	if(playerX <= margins){
-		playerX = margins;
-		if (playerMagX !=0)	
-		{			
-			pos.forEach(moveBG);
-			pos.forEach(bgAdjust);
-		}
-	}
-	
-	if((playerY >= floor) && playerMagY < 0){
-		playerMagY = 0;
-		playerY = floor;
-		jumps = 0;
-	}
 	playerY -= playerMagY;
-	
-	
+	playerX += facingRight ? (+slideTimer) : (-slideTimer);
+	//Check for collision
+	collision();
+	//Move the player image on the page
 	player.style.top = playerY + "%";
 	player.style.left = playerX + "%";
 	
+	//Make the image change if the player is moving
 	if((runningTime > 0 && frameNum%5 == 1) || (runningTime > 30 && frameNum%2 == 1) )
 	{
 		playerImg++;
 	}
 	
+	//Set the image
 	player.src = "res/Alex Run_" + (playerImg%3 + 1) + ".png";
+	
+	//Turn the player left and right
 	if ( playerMagX < 0)
 	{
 		player.style.transform = "scaleX(-1)";
+		facingRight = false;
 	}
 	else if ( playerMagX > 0)
 	{
 		player.style.transform = "scaleX(1)";
+		facingRight = true;
 	}
-	document.getElementById("counter").textContent = "xMag: " + playerMagX + "  runningTime: " + runningTime + "  frame: " + frameNum%3;
-
-}
-
-function moveBG(item, index)
-{
-	console.log(pos);
-	pos[index] -= playerMagX/3*2;
-	console.log(pos);
-}
-
-function bgAdjust(item, index)
-{
-	var length = pos.length;
-	var half = (pos.length * 75 )/2;
-	var next = (index+1)%length;
-	var previous = (index + length - 1) % length;
 	
-	if(pos[index] > half)
-	{
-		pos[index] = pos[next] - 75;
-		console.log(index, item, next, pos[next]);
-	}
-	if(pos[index] < -half)
-	{
-		pos[index] = pos[previous] + 75;
-	}
-	document.getElementById("bg" + index).style.left = pos[index] + "%";
+	//Diagnostics for the top of the page
+	document.getElementById("counter").textContent = "  frame: " + frameNum%3 + "   jumps: " + jumps + "   jumpHeight: " + jumpHeight + "   jumping: " + jumping + "   ymag: " + playerMagY;
+	console.log(document.getElementById("counter").textContent);
+
 }
+
